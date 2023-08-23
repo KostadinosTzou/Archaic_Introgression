@@ -1,0 +1,120 @@
+import numpy as np
+import json
+import os
+
+# Current directory
+json_directory = os.getcwd()
+
+# Lists to store starting probabilities for Human and Archaic
+human_starting_probabilities = []
+archaic_starting_probabilities = []
+
+# Iterate through JSON files in the current directory
+for filename in os.listdir(json_directory):
+    if filename.endswith('.json'):
+        json_path = os.path.join(json_directory, filename)
+        
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        starting_probabilities = data['starting_probabilities']
+        human_starting_probabilities.append(starting_probabilities[0])
+        archaic_starting_probabilities.append(starting_probabilities[1])
+
+# Calculate mean of human and archaic starting probabilities
+mean_human_starting = np.mean(human_starting_probabilities)
+mean_archaic_starting = np.mean(archaic_starting_probabilities)
+
+# Calculate standard deviation of human and archaic starting probabilities
+std_human_starting = np.std(human_starting_probabilities)
+std_archaic_starting = np.std(archaic_starting_probabilities)
+
+print("Mean of Human Starting Probabilities:", mean_human_starting)
+print("Standard Deviation of Human Starting Probabilities:", std_human_starting)
+
+print("Mean of Archaic Starting Probabilities:", mean_archaic_starting)
+print("Standard Deviation of Archaic Starting Probabilities:", std_archaic_starting)
+
+----------------------------------------------------------------------------------------------
+
+import numpy as np
+import json
+import os
+
+# Current directory
+json_directory = os.getcwd()
+
+# Lists to store transition probabilities
+human_to_human_transitions = []
+human_to_archaic_transitions = []
+archaic_to_human_transitions = []
+archaic_to_archaic_transitions = []
+
+# Iterate through JSON files in the current directory
+for filename in os.listdir(json_directory):
+    if filename.endswith('.json'):
+        json_path = os.path.join(json_directory, filename)
+        
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        transitions = data['transitions']
+        human_to_human_transitions.append(transitions[0][0])  # Human to Human
+        human_to_archaic_transitions.append(transitions[0][1])  # Human to Archaic
+        archaic_to_human_transitions.append(transitions[1][0])  # Archaic to Human
+        archaic_to_archaic_transitions.append(transitions[1][1])  # Archaic to Archaic
+
+# Calculate mean and standard deviation of transition probabilities
+mean_human_to_human = np.mean(human_to_human_transitions)
+std_human_to_human = np.std(human_to_human_transitions)
+mean_human_to_archaic = np.mean(human_to_archaic_transitions)
+std_human_to_archaic = np.std(human_to_archaic_transitions)
+mean_archaic_to_human = np.mean(archaic_to_human_transitions)
+std_archaic_to_human = np.std(archaic_to_human_transitions)
+mean_archaic_to_archaic = np.mean(archaic_to_archaic_transitions)
+std_archaic_to_archaic = np.std(archaic_to_archaic_transitions)
+
+print("Mean of Human to Human Transitions:", mean_human_to_human)
+print("Standard Deviation of Human to Human Transitions:", std_human_to_human)
+print("Mean of Human to Archaic Transitions:", mean_human_to_archaic)
+print("Standard Deviation of Human to Archaic Transitions:", std_human_to_archaic)
+print("Mean of Archaic to Human Transitions:", mean_archaic_to_human)
+print("Standard Deviation of Archaic to Human Transitions:", std_archaic_to_human)
+print("Mean of Archaic to Archaic Transitions:", mean_archaic_to_archaic)
+print("Standard Deviation of Archaic to Archaic Transitions:", std_archaic_to_archaic)
+
+----------------------------------------------------------------------------------------------
+
+import numpy as np
+import json
+import os
+
+# Current directory
+json_directory = os.getcwd()
+
+# Lists to store emissions values for human and archaic
+human_emissions = []
+archaic_emissions = []
+
+# Iterate through JSON files in the current directory
+for filename in os.listdir(json_directory):
+    if filename.endswith('.json'):
+        json_path = os.path.join(json_directory, filename)
+        
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        
+        emissions = data['emissions']
+        human_emissions.append(emissions[0])  # Human emission
+        archaic_emissions.append(emissions[1])  # Archaic emission
+
+# Calculate mean and standard deviation of emissions for human and archaic
+mean_human_emissions = np.mean(human_emissions)
+std_human_emissions = np.std(human_emissions)
+mean_archaic_emissions = np.mean(archaic_emissions)
+std_archaic_emissions = np.std(archaic_emissions)
+
+print("Mean of Human Emissions:", mean_human_emissions)
+print("Standard Deviation of Human Emissions:", std_human_emissions)
+print("Mean of Archaic Emissions:", mean_archaic_emissions)
+print("Standard Deviation of Archaic Emissions:", std_archaic_emissions)
