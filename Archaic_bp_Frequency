@@ -1,0 +1,34 @@
+#Example using ENSG00000157191 region to identify ovrlapping intervals and calculate the frequency of archaic bp
+bedtools intersect -a archaic_merged.bed -b ENSG00000157191.bed | awk 'BEGIN{s=0} 
+{s+=$3-$2} END{print s}'
+8834
+
+bedtools intersect -a archaic_merged.bed -b ENSG00000157191.bed | awk 'BEGIN{s=0} 
+{s+=($3-$2)*$4} END{print s}'
+229684
+
+cat ENSG00000157191.bed | awk '{print ($3-$2)}'
+21407 
+
+python (exit : control D)
+
+21407 * 1006
+21535442
+
+229684 / 21535442
+0.01066539521222736 #frequency of archaic bases in the ENSG00000157191 interval
+###############################################################
+#For all genes in a file
+bedtools intersect -a archaic_merged.bed -b 1kbp_canon_genes_sorted.bed -wb | cut -f 1-4,8 > o.bed
+awk -F'\t' '{ size = $3 - $2; print $1 "\t" $2 "\t" $3 "\t" size "\t" $4 "\t" $5 }' o.bed > o_output.bed
+awk -F'\t' '{ size = $3 - $2; print size "\t" $4 "\t" $5 }' o.bed > o_lengths.txt
+awk '{ gene_length[$3] += $1 } END { for (gene in gene_length) print gene_length[gene], gene }' o_lengths.txt > o_summed_lengths.txt
+awk -F'\t' '{ gene_size[$3] += $1; gene_freq[$3] += $2 } END { for (gene in gene_size) print gene_size[gene], gene_freq[gene], gene }' o_lengths.txt > o_aggregated_lengths.txt
+
+awk -F'\t' '{ size = $3 - $2; print size "\t" $4 }' 1kbp_canon_genes_sorted.bed > canon_gene_lengths.bed
+
+
+awk '{ print $1 * $2, $3 }' o_aggregated_lengths.txt > o_multiplied_lengths.txt
+awk '{ print $1 * 1006, $2 }' canon_gene_lengths.bed > gene_lengths_multiplied.txt
+
+awk 'NR==FNR { genes[$2] = $1; next } ($2 in genes) { print $1 / genes[$2], $2 }' gene_lengths_multiplied.txt o_multiplied_lengths.txt > freqeuncy_archaic_bp.txt
