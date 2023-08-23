@@ -1,0 +1,56 @@
+import os
+import subprocess
+import glob
+
+def run_hmmix_decode(obs_file, out_file):
+    command = f"hmmix decode -obs={obs_file} -weights=astrickmask.bed -mutrates=EUR_AFR_mutrates.bed -param=trained.EUR_AFR.phased.json -out={out_file} -haploid"
+    subprocess.run(command, shell=True)
+
+def main():
+    obs_files = glob.glob("obs*.txt")
+    for obs_file in obs_files:
+        # Extract the identifier from the obs file name
+        obs_name = os.path.splitext(obs_file)[0].replace("obs.", "")
+
+        # Create the output file name with corresponding identifier
+        out_file = f"{obs_name}_EUR.decoded"
+
+        # Run hmmix decode for the current obs file
+        run_hmmix_decode(obs_file, out_file)
+
+if __name__ == "__main__":
+    main()
+
+-----------------------------------------------------------------------------------------------------------------------------------
+import os
+import subprocess
+import glob
+
+def run_hmmix_decode(obs_file, out_file, param_file):
+    command = f"hmmix decode -obs={obs_file} -weights=astrickmask.bed -mutrates=EUR_AFR_mutrates.bed -param={param_file} -out={out_file} -haploid"
+    subprocess.run(command, shell=True)
+
+def main():
+    obs_files = glob.glob("obs*.txt")
+    for obs_file in obs_files:
+        # Extract the identifier from the obs file name
+        obs_name = os.path.splitext(obs_file)[0].replace("obs.", "")
+
+        # Create the output file path in the current directory
+        out_file = f"{obs_name}_EUR.decoded"
+
+        # Use the corresponding param file in the current directory
+        param_file = f"trained.{obs_name}.phased.json"
+
+        # Check if the param file exists
+        if os.path.exists(param_file):
+            # Print a message indicating the processing of the current file
+            print(f"Processing {obs_file} using {param_file}")
+
+            # Run hmmix decode for the current obs file
+            run_hmmix_decode(obs_file, out_file, param_file)
+        else:
+            print(f"Parameter file not found for {obs_name}")
+
+if __name__ == "__main__":
+    main()
