@@ -1,0 +1,23 @@
+#!/usr/bin/env python
+
+import numpy as np
+import json
+
+array = np.loadtxt('1kgp_populations', dtype = 'str', delimiter= '\t', skiprows= 1)
+
+individuals = {"outgroup" : [], "ingroup" : []}
+
+ingroup = ["CEU", "TSI", "GBR", "FIN", "IBS"]
+
+outgroup = ["YRI", "LWK", "GWD", "MSL", "ESN"]
+
+for r in array:
+    if r[1] in outgroup:
+        individuals['outgroup'].append(r[0])
+
+for r in array:
+    if r[1] in ingroup:
+        individuals["ingroup"].append(r[0])
+
+individuals_file = open('ind_EUR_AFR.json', 'w')
+individuals_file.write(json.dumps(individuals))
