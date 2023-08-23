@@ -1,0 +1,51 @@
+import os
+import subprocess
+import glob
+
+def run_hmmix_train(obs_file, out_file):
+    command = f"hmmix train -obs={obs_file} -weights=astrickmask.bed -mutrates=EUR_AFR_mutrates.bed -out={out_file} -haploid"
+    subprocess.run(command, shell=True)
+
+def main():
+    obs_files = glob.glob("obs*.txt")
+    for obs_file in obs_files:
+        # Extract the identifier from the obs file name
+        obs_name = os.path.splitext(obs_file)[0].replace("obs.", "")
+
+        # Create the output file name with corresponding identifier
+        out_file = f"trained.{obs_name}.phased.json"
+
+        # Run hmmix train for the current obs file
+        run_hmmix_train(obs_file, out_file)
+
+if __name__ == "__main__":
+    main()
+
+------------------------------------------------------------------------------------------------------
+
+import os
+import subprocess
+import glob
+
+def run_hmmix_train(obs_file, out_file):
+    command = f"hmmix train -obs={obs_file} -weights=astrickmask.bed -mutrates=EUR_AFR_mutrates.bed -out={out_file} -haploid"
+    subprocess.run(command, shell=True)
+
+def main():
+    obs_files = glob.glob("obs*.txt")
+    for obs_file in obs_files:
+        # Extract the identifier from the obs file name
+        obs_name = os.path.splitext(obs_file)[0].replace("obs.", "")
+
+        # Create the output file name with corresponding identifier
+        out_file = f"trained.{obs_name}.phased.json"
+
+        # Check if the output file already exists
+        if not os.path.exists(out_file):
+            # Run hmmix train for the current obs file if the output file doesn't exist
+            run_hmmix_train(obs_file, out_file)
+        else:
+            print(f"Skipping {obs_name} - Output file already exists")
+
+if __name__ == "__main__":
+    main()
