@@ -1,0 +1,12 @@
+ancestral=`echo ancestral/homo_sapiens_ancestor_{1..22}.fa | sed 's/ /,/g'`
+xancestral=`echo ancestral/homo_sapiens_ancestor_X.fa | sed 's/ /,/g'`
+
+hmmix create_outgroup -ind=ind_EUR_AFR.json -vcf=$xbcf_files -weights=strickmask.bed  -out=x_outgroup.txt -ancestral=$xancestral
+
+hmmix mutation_rate -outgroup=EUR_AFR_outgroup.txt -weights=strickmask.bed -window_size=100000 -out=x_mutrates.bed
+
+hmmix create_ingroup -ind=ind_EUR_AFR.json -vcf=$bcf_files -weights=strickmask.bed -out=obs -outgroup=EUR_AFR_outgroup.txt -ancestral=$ancestral
+
+hmmix train -obs=obs.HG00096.txt -weights=astrickmask.bed -mutrates=EUR_AFR_mutrates.bed -out=trained.x.phased.json -haploid
+
+hmmix decode -obs=obs -weights=strickmask.bed -mutrates=mutrates.bed -param=trained.EUR_AFR.phased.json -out=EUR_AFR.decoded -haploid
