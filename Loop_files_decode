@@ -54,3 +54,21 @@ def main():
 
 if __name__ == "__main__":
     main()
+----------------------------------------------------------------------------------------------------------------------
+
+import os
+import subprocess
+import glob
+
+def run_awk_command(input_file, output_file):
+    awk_command = 'BEGINS{FS=OFS="\t"} NR==1 {print;next} {$3 = $3 + 1000; print }'
+    subprocess.run(f"awk '{awk_command}' {input_file} > {output_file}", shell=True)
+
+def main():
+    sample_files = glob.glob("HG*.decoded.hap1.txt") + glob.glob("HG*.decoded.hap2.txt") + glob.glob("NA*.decoded.hap1.txt") + glob.glob("NA*.decoded.hap2.txt")
+    for sample_file in sample_files:
+        output_file = "c_" + sample_file
+        run_awk_command(sample_file, output_file)
+
+if __name__ == "__main__":
+    main()
